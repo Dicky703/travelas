@@ -9,12 +9,21 @@ from travelas.forms import PageForm
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from travelas.forms import UserForm, UserProfileForm
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from .models import UserProfile
+from django.shortcuts import (get_object_or_404,
+                              render, 
+                              HttpResponseRedirect)
+
 
 # Create your views here.
 
 def index(request):
 
-    context = RequestContext(request)
+    if request.user.is_authenticated:
+
+        context = RequestContext(request)
 
     car_list = Car.objects.order_by('-name')[:10]
     context_dict = {'cars' : car_list}
@@ -22,7 +31,20 @@ def index(request):
     for car in car_list:
         car.url = car.name.replace(' ', '_')
 
-    return render(request, 'travelas/index.html', context_dict)
+    return render(request, 'travelas/index.html')
+
+
+    #if request.user.is_authenticated:
+
+        #context = RequestContext(request)
+
+    #car_list = Car.objects.order_by('-name')[:10]
+    #context_dict = {'cars' : car_list}
+
+    #for car in car_list:
+        #car.url = car.name.replace(' ', '_')
+
+    #return render(request, 'travelas/index.html')
 
 def car(request, car_name_url):
 
@@ -162,4 +184,124 @@ def register(request):
     # Render the template depending on the context.
     return render(request,
             'travelas/register.html',
-            {'user_form': user_form, 'profile_form': profile_form, 'registered': registered},)                               
+            {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+
+
+def user_login(request):
+    context = RequestContext(request)
+
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+
+        user = authenticate(username = username, password = password)
+
+        if user:
+
+            if user.is_active:
+                login(request, user)
+                return render(request, 'travelas/index.html')
+
+            else:
+                print("Your travelas account is disabled.")
+
+        else:
+            print("Invalid login details: {0}, {1}.format(username, password)")
+            return HttpResponse("Invalid login details supplied.")
+
+    else:
+    
+        return render(request, 'travelas/login.html', {},)
+
+@login_required
+def restricted(request):
+
+    if request.user.is_authenticated:
+
+        context = RequestContext(request)
+
+    car_list = Car.objects.order_by('-name')[:10]
+    context_dict = {'cars' : car_list}
+
+    for car in car_list:
+        car.url = car.name.replace(' ', '_')
+
+    return render(request, 'travelas/index.html', context_dict)
+
+    #context = RequestContext(request)
+
+    #return render(request, 'travelas/index.html', context, context_dict)
+
+ 
+# Use the login_required() decorator to ensure only those logged in can access the view.
+@login_required
+def user_logout(request):
+    # Since the user is logged in, we can now just log them out.
+    logout(request)
+
+    # Take the user back to the homepage.
+    return render(request, 'travelas/index.html')
+
+
+# delete view for details
+def delete_view(request, id):
+    # dictionary for initial data with 
+    # field names as keys
+    context ={}
+ 
+    # fetch the object related to passed id
+    obj = get_object_or_404(Car, id = id)
+
+ 
+    if request.method =="POST":
+        # delete object
+        obj.delete()
+        # after deleting redirect to 
+        # home page
+        return render(request, "travelas/restricted.html")
+ 
+    return render(request, "travelas/delete_view.html", context)  
+
+
+ 
+# update view for details
+def update_view(request, id):
+    # dictionary for initial data with 
+    # field names as keys
+    context ={}
+
+ 
+    # fetch the object related to passed id
+    obj = get_object_or_404(Car, id = id)
+ 
+    # pass the object as instance in form
+    form = CarForm(request.POST or None, instance = obj)
+ 
+    # save the data from the form and
+    # redirect to detail_view
+    if form.is_valid():
+        form.save()
+        return render(request, 'travelas/restricted.html')
+ 
+    # add form dictionary to context
+    context["form"] = form
+ 
+    return render(request, "travelas/update_view.html", context)
+
+# pass id attribute from urls
+def detail_view(request, id):
+    # dictionary for initial data with 
+    # field names as keys
+    context ={}
+ 
+    # add the dictionary during initialization
+    context["data"] = car.objects.get(id = id)
+         
+    return render(request, "travelas/detail_view.html", context)    
+
+
+ 
+ 
+ 
+

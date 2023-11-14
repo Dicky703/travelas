@@ -83,8 +83,8 @@ DATABASES = {
         #'ENGINE': 'django.db.backends.sqlite3',
         #'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'eazzytravel',  
-        'USER': 'travelas',  
+        'NAME': 'project02',  
+        'USER': 'eazzy_users',  
         'PASSWORD': 'dixon2000',  
         'HOST': 'localhost',  
         'PORT': '3306',  
@@ -139,3 +139,6 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = '/travelas/login/'
+#LOGOUT_REDIRECT_URL = '/travelas/logout/'

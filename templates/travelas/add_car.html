@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Eazzytravel</title>
-    </head>
+ {% extends 'travelas/base.html' %}
 
-    <body>
+ {% block body_block %} 
+
         <h1>Add a Car</h1>
 
         <form id="car_form" method="post" action="/travelas/add_car/">
@@ -23,6 +20,5 @@
 
             <input type="submit" name="submit" value="Create Car" />
         </form>
-    </body>
-
-</html>
+        {% endblock %}
+  

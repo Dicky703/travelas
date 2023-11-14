@@ -1,23 +1,21 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Eazzytravel</title>
-    </head>
+{% extends 'travelas/base.html' %}
 
-    <body>
-        <h1>{{ car_name }}</h1>
-        {% if car %}
-            {% if pages %}
-            <ul>
-                {% for page in pages %}
-                <li><a href="{{ page.url }}">{{ page.title }}</a></li>
-                {% endfor %}
-            </ul>
-            {% else %}
-                <strong>No pages currently in car.</strong>
-            {% endif %}
-        {% else %}
-            The specified car {{ car_name }} does not exist!
-        {% endif %}
-    </body>
-</html>
+
+{% block title %}{{ car_name }}{% endblock %}
+
+{% block body_block %}
+    <h1>{{ car_name }}</h1>
+
+    {% if pages %}
+    <ul>
+        {% for page in pages %}
+        <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <strong>No pages currently in car.</strong>
+    {% endif %}
+
+     
+
+{% endblock %}

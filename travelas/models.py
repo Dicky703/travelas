@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Car(models.Model):
+	#car_id = models.PositiveIntegerField(primary_key=True)
 	name = models.CharField(max_length = 128, unique = True)
 
 	def __unicode__(self):

@@ -1,28 +1,29 @@
-<!DOCTYPE html>
+{% extends 'travelas/base.html' %}
 
-<html>
-<head>
-	 
+{% block body_block %}
+        {% if user.is_authenticated %}
+        <h1>Hello {{ user.username }}!</h1>
+        {% else %}
+        <h1>Welcome to Eazzytravel</h1>
+        {% endif %}
 
-		<title>Eazzytravel</title>
-	</head>
-
-	<body>
-
-		 {% if cars %}
+{% if cars %}
             <ul>
                 {% for car in cars %}
                 <li><a href="/travelas/car/{{ car.url }}">{{ car.name }}</a></li>
                 {% endfor %}
+
             </ul>
-        {% else %}
-            <strong>There are no cars present.</strong>
+
+           {% else %}
+            <strong>There are no cars present please login.</strong>
         {% endif %}
 
-		 <br><a href="/travelas/about/">About</a> </br>
-		<br> <a href="/travelas/add_car/"> Add a New Car</a> </br/>
-		<br> <a href="/travelas/register/">Register Here</a> </br>
+        {% endblock %}   
 
-	</body>
+         
+        
 
-</html>
+
+        
+          

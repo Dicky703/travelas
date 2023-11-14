@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Eazzytravel - {% block title %} Welcome to Eazzytravel {% endblock %}</title>
+    </head>
+        <div>
+       
+            {% block body_block %} {% if user.is_authenticated %}
+        <h1>Hello {{ user.username }}!</h1>
+        {% else %}
+        <h1>Welcome to Eazzytravel</h1>
+        {% endif %}
+
+{% if cars %}
+            <ul>
+                {% for car in cars %}
+                <li><a href="/travelas/car/{{ car.url }}">{{ car.name }}</a></li>
+                {% endfor %}
+
+            </ul>
+
+           {% else %}
+            <strong>There are no cars present please login.</strong>
+        {% endif %}
+         {% endblock %}
+
+        </div> 
+
+        <hr />
+
+        <div>
+            <ul>
+            {% if user.is_authenticated %}
+                <li><a href="/travelas/restricted/">Choose your desired vehicle</a></li>
+                <li><a href="/travelas/logout/">Logout</a></li>
+                <li><a href="/travelas/add_car/">Add a New Car</a></li>
+                <li><a href="/<id>/delete/">Delete</a></li>
+            {% else %}
+                <li><a href="/travelas/register/">Register Here</a></li>
+                <li><a href="/travelas/login/">Login</a></li>
+            {% endif %}
+
+                <li><a href="/travelas/about/">About</a></li>
+            </ul>
+        </div>
+    
+</html>
